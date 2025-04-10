@@ -12,6 +12,8 @@ format.
 ### Changed
 
 - Use ncruces/go-coverage-report instead of codecov/codecov-action
+- Made release action use what's in CHANGELOG.md to get the tag and release
+  notes
 
 ### Fixed
 

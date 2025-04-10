@@ -5,12 +5,6 @@ permissions:
 
 on:
   workflow_call:
-    inputs:
-      tag:
-        description: 'Tag to create'
-        required: true
-        default: 'v0.0.0'
-        type: string
   workflow_dispatch:
 
 jobs:
@@ -26,10 +20,11 @@ jobs:
 
       - name: Create release
         run: |
-          echo "Need to update go-ci/release.yml to ensure that the release is defined in CHANGELOG.md but not yet tagged, then use the text in CHANGELOG as the text of the release instead of the commit log" && false
-          git log --format="%C(auto) %H %s" `git tag --sort=-committerdate | head -1`...HEAD > changelog.txt
+          sed -rn -e '/^## \[[^]]+\] - [0-9]{4}(-[0-9]{2}){2}/{ :l; p; n; /^(## |\[[^]]+\]: http)/q; bl; }' <./CHANGELOG.md >release-changelog.tmp
+          head -1 release-changelog.tmp | sed -r -e 's/^## \[([^]]+)\].*$/v\1/' >release-tag.tmp
+          tag="$(cat release-tag.tmp)" && if git rev-parse -q --verify --end-of-options "$tag"; then echo "tag '$tag' already exists!"; false; fi
           echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
-          gh release create ${{ github.event.inputs.tag }} -t ${{ github.event.inputs.tag }} -F changelog.txt
+          tag="$(cat release-tag.tmp)" && gh release create "$tag" -t "$tag" -F release-changelog.tmp
 
       - name: Ping pkg.go.dev
         run: |
