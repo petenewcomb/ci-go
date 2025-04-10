@@ -1,5 +1,7 @@
 name: test
 
+permissions: {} # no need any permissions
+
 on:
   workflow_call:
 
@@ -14,14 +16,14 @@ jobs:
         go: ['stable', 'oldstable']
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Install Go
         uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go }}
           check-latest: true
-
-      - name: Checkout code
-        uses: actions/checkout@v4
 
       - name: Run tests
         run: go test -v -count=1 -race -shuffle=on -coverprofile=coverage.txt ./...

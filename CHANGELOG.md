@@ -4,6 +4,13 @@ The `ci-go` project adheres to [Semantic Versioning]. This file documents all
 notable changes to this project and generally follows the [Keep a Changelog]
 format.
 
+## [0.0.2] - 2025-04-10
+
+### Fixed
+
+- Checkout before installing Go to avoid [missing `go.sum`
+  warning](https://github.com/actions/setup-go/issues/427#issuecomment-2273249463)
+
 ## [0.0.1] - 2025-04-10
 
 ### Added
