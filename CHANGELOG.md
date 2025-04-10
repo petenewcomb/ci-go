@@ -6,15 +6,19 @@ format.
 
 ## [0.0.2] - 2025-04-10
 
+### Added
+- Made actions user-triggerable from the GitHub web interface
+
 ### Changed
 
 - Use ncruces/go-coverage-report instead of codecov/codecov-action
-- Made actions user-triggerable from the GitHub web interface
 
 ### Fixed
 
+- General operation of actions on the ci-go repository itself
 - Checkout before installing Go to avoid [missing `go.sum`
   warning](https://github.com/actions/setup-go/issues/427#issuecomment-2273249463)
+- Removed broken golangci configuration to use defaults instead
 
 ## [0.0.1] - 2025-04-10
 
