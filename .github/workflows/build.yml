@@ -100,4 +100,3 @@ jobs:
         uses: ncruces/go-coverage-report@v0
         with:
           amend: true
-        continue-on-error: true
