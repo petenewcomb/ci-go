@@ -4,6 +4,11 @@ The `ci-go` project adheres to [Semantic Versioning]. This file documents all
 notable changes to this project and generally follows the [Keep a Changelog]
 format.
 
+## [0.0.3] - 2025-04-10
+
+### Fixed
+- Fixed parameter substitution in release action ping to pkg.go.dev
+
 ## [0.0.2] - 2025-04-10
 
 ### Added
