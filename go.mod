@@ -1,3 +1,3 @@
-module github.com/cristalhq/.github
+module github.com/petenewcomb/ci-go
 
 go 1.19
