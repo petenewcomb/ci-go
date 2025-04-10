@@ -31,6 +31,7 @@ on:
         default: ''
         required: false
         type: string
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}${{ inputs.groupSuffix }}
