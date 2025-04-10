@@ -1,6 +1,7 @@
 name: build
 
-permissions: {} # no need any permissions
+permissions:
+  contents: write # for coverage updates on the wiki
 
 on:
   push:
