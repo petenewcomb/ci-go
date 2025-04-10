@@ -6,6 +6,10 @@ format.
 
 ## [0.0.2] - 2025-04-10
 
+### Changed
+
+- Use ncruces/go-coverage-report instead of codecov/codecov-action
+
 ### Fixed
 
 - Checkout before installing Go to avoid [missing `go.sum`

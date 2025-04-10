@@ -90,11 +90,12 @@ jobs:
         if: ${{ !inputs.skipTests }}
         run: go test -v -shuffle=on -tags=${{ inputs.buildTags }} -run=^$ -bench=. -benchtime=1x ./...
 
-      - name: Upload Coverage
-        if: ${{ !inputs.skipTests }}
-        uses: codecov/codecov-action@v4
-        continue-on-error: true
+      - name: Update coverage report
+        if: |
+          !inputs.skipTests &&
+          matrix.go == 'stable' &&
+          github.event_name == 'push'
+        uses: ncruces/go-coverage-report@v0
         with:
-          token: ${{secrets.CODECOV_TOKEN}}
-          file: ./coverage.txt
-          fail_ci_if_error: false
+          amend: true
+        continue-on-error: true
