@@ -9,6 +9,7 @@ format.
 ### Changed
 
 - Use ncruces/go-coverage-report instead of codecov/codecov-action
+- Made actions user-triggerable from the GitHub web interface
 
 ### Fixed
 
