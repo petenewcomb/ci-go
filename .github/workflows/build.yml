@@ -86,7 +86,7 @@ jobs:
 
       - name: Go Test
         if: ${{ !inputs.skipTests }}
-        run: go test -v -shuffle=on -tags=${{ inputs.buildTags }} -race -count=1 -coverprofile=coverage.txt ./...
+        run: go test -v -shuffle=on -tags=${{ inputs.buildTags }} -race -count=1 -coverprofile=coverage.txt -coverpkg ./...
 
       - name: Go Benchmark
         if: ${{ !inputs.skipTests }}
