@@ -8,13 +8,33 @@ on:
   pull_request:
     branches: [main]
   workflow_call:
+    inputs:
+      jobTimeoutMinutes:
+        description: 'Overall job timeout in minutes'
+        default: '10'
+        required: false
+        type: number
+      golangciLintTimeout:
+        description: 'Value to pass to golangci-lint --timeout'
+        default: '5m'
+        required: false
+        type: string
+      groupSuffix:
+        description: 'Concurrency group suffix to allow multiple jobs'
+        default: ''
+        required: false
+        type: string
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}${{ inputs.groupSuffix }}
+  cancel-in-progress: true
 
 jobs:
   run:
     name: Lint
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: ${{ inputs.jobTimeoutMinutes }}
     strategy:
       fail-fast: true
 
@@ -44,7 +64,7 @@ jobs:
         uses: golangci/golangci-lint-action@v5.0.0
         with:
           version: latest
-          args: --timeout 5m
+          args: --timeout ${{ inputs.golangciLintTimeout }}
 
       - name: Go Vet
         run: go vet ./...

@@ -4,6 +4,18 @@ The `ci-go` project adheres to [Semantic Versioning]. This file documents all
 notable changes to this project and generally follows the [Keep a Changelog]
 format.
 
+## [0.0.6] - 2025-04-17
+
+### Added
+
+- jobTimeoutMinutes, testTimeout, golangciTimeout input parameters
+- Concurrency group configuration for all workflows
+- Tests now run with -cpu 1,2,4
+
+### Changed
+
+- Pinging pkg.go.dev to publish docs now skipped unless new publishDocs input parameter is true
+
 ## [0.0.5] - 2025-04-16
 
 ### Fixed

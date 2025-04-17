@@ -11,6 +11,16 @@ on:
         default: '1'
         required: false
         type: string
+      jobTimeoutMinutes:
+        description: 'Overall job timeout in minutes'
+        default: '15'
+        required: false
+        type: number
+      testTimeout:
+        description: 'Value to pass to go test -timeout'
+        default: '10m'
+        required: false
+        type: string
       groupSuffix:
         description: 'Concurrency group suffix to allow multiple jobs'
         default: ''
@@ -26,7 +36,7 @@ jobs:
   run:
     name: Test
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: ${{ inputs.jobTimeoutMinutes }}
     strategy:
       fail-fast: true
       matrix:
@@ -43,11 +53,10 @@ jobs:
           check-latest: true
 
       - name: Go Test
-        run: go test -v -shuffle=on -tags=${{ inputs.buildTags }} -race -count=1 -coverprofile=coverage.txt -coverpkg ./...
+        run: go test -v -timeout=${{ inputs.testTimeout }} -shuffle=on -tags=${{ inputs.buildTags }} -cpu 1,2,4 -race -count=1 -coverprofile=coverage.txt -coverpkg ./...
 
       - name: Update coverage report
         if: |
-          !inputs.skipTests &&
           matrix.go == 'stable' &&
           github.event_name == 'push'
         uses: ncruces/go-coverage-report@v0

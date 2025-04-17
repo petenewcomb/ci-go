@@ -5,7 +5,17 @@ permissions:
 
 on:
   workflow_call:
+    inputs:
+      publishDocs:
+        description: 'Publish docs to pkg.go.dev'
+        default: false
+        required: false
+        type: boolean
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
 
 jobs:
   run:
@@ -27,6 +37,7 @@ jobs:
           tag="$(cat release-tag.tmp)" && gh release create "$tag" -t "$tag" -F release-changelog.tmp
 
       - name: Ping pkg.go.dev
+        if: ${{ inputs.publishDocs }}
         run: |
           tag="$(cat release-tag.tmp) && \
           mod="$(go list -m) && \

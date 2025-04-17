@@ -10,13 +10,28 @@ on:
   schedule:
   - cron: '0 10 * * 0' # run "At 10:00 on Sunday"
   workflow_call:
+    inputs:
+      jobTimeoutMinutes:
+        description: 'Overall job timeout in minutes'
+        default: '5'
+        required: false
+        type: number
+      groupSuffix:
+        description: 'Concurrency group suffix to allow multiple jobs'
+        default: ''
+        required: false
+        type: string
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}${{ inputs.groupSuffix }}
+  cancel-in-progress: true
 
 jobs:
   run:
     name: Vuln
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: ${{ inputs.jobTimeoutMinutes }}
     strategy:
       fail-fast: true
 
