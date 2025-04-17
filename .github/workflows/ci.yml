@@ -57,7 +57,7 @@ jobs:
   test:
     uses: ./.github/workflows/test.yml
     with:
-      testTimeoutMinutes: ${{ inputs.testJobTimeoutMinutes }}
+      jobTimeoutMinutes: ${{ inputs.testJobTimeoutMinutes }}
       buildTags: ${{ inputs.buildTags }}
       goTestTimeout: ${{ inputs.goTestTimeout }}
   vuln:
