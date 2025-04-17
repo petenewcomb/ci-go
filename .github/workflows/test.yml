@@ -15,7 +15,7 @@ on:
         description: 'Build tags to use.'
         required: false
         type: string
-      testTimeout:
+      goTestTimeout:
         description: 'Value to pass to go test -timeout'
         default: '10m'
         required: false
@@ -43,7 +43,7 @@ jobs:
 
       - name: Go Test
         run: |
-          go test -v -timeout='${{ inputs.testTimeout }}' -shuffle=on \
+          go test -v -timeout='${{ inputs.goTestTimeout }}' -shuffle=on \
              ${{ inputs.buildTags && format('-tags=''{0}'' ', inputs.buildTags) || '' }} \
              -cpu 1,2,4 -race -count=1 -coverprofile=coverage.txt -coverpkg ./...
 
