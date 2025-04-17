@@ -51,7 +51,9 @@ jobs:
         run: gofmt -s -w . && git diff --exit-code
 
       - name: Go Imports
-        run: goimports -w . && git diff --exit-code
+        run: |
+          go install golang.org/x/tools/cmd/goimports@latest
+          goimports -w . && git diff --exit-code
 
       - name: Go Tidy
         run: go mod tidy && git diff --exit-code
