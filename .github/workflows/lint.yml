@@ -20,7 +20,7 @@ jobs:
   run:
     name: Lint
     runs-on: ubuntu-latest
-    timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes) }}
+    timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes || 10) }}
     strategy:
       fail-fast: true
 
@@ -51,4 +51,4 @@ jobs:
       - name: Golangci-Lint
         uses: golangci/golangci-lint-action@v7
         with:
-          args: --timeout ${{ inputs.golangciLintTimeout }}
+          args: --timeout ${{ inputs.golangciLintTimeout || '5m' }}

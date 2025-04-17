@@ -12,6 +12,7 @@ on:
         type: number
       buildTags:
         description: 'Go build tags'
+        default: ''
         required: false
         type: string
 
@@ -19,7 +20,7 @@ jobs:
   run:
     name: Build
     runs-on: ubuntu-latest
-    timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes) }}
+    timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes || 5) }}
     strategy:
       fail-fast: true
       matrix:

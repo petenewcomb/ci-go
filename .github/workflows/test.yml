@@ -13,6 +13,7 @@ on:
         type: number
       buildTags:
         description: 'Build tags to use.'
+        default: ''
         required: false
         type: string
       goTestTimeout:
@@ -25,7 +26,7 @@ jobs:
   run:
     name: Test
     runs-on: ubuntu-latest
-    timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes) }}
+    timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes || 15) }}
     strategy:
       fail-fast: true
       matrix:
@@ -43,7 +44,7 @@ jobs:
 
       - name: Go Test
         run: |
-          go test -v -timeout='${{ inputs.goTestTimeout }}' -shuffle=on \
+          go test -v -timeout='${{ inputs.goTestTimeout || '10m' }}' -shuffle=on \
              ${{ inputs.buildTags && format('-tags=''{0}'' ', inputs.buildTags) || '' }} \
              -cpu 1,2,4 -race -count=1 -coverprofile=coverage.txt -coverpkg ./...
 

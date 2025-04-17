@@ -47,20 +47,20 @@ jobs:
   build:
     uses: ./.github/workflows/build.yml
     with:
-      jobTimeoutMinutes: ${{ inputs.buildJobTimeoutMinutes }}
+      jobTimeoutMinutes: ${{ inputs.buildJobTimeoutMinutes || 0 }}
       buildTags: ${{ inputs.buildTags }}
   lint:
     uses: ./.github/workflows/lint.yml
     with:
-      jobTimeoutMinutes: ${{ inputs.lintJobTimeoutMinutes }}
+      jobTimeoutMinutes: ${{ inputs.lintJobTimeoutMinutes || 0 }}
       golangciLintTimeout: ${{ inputs.golangciLintTimeout }}
   test:
     uses: ./.github/workflows/test.yml
     with:
-      jobTimeoutMinutes: ${{ inputs.testJobTimeoutMinutes }}
+      jobTimeoutMinutes: ${{ inputs.testJobTimeoutMinutes || 0 }}
       buildTags: ${{ inputs.buildTags }}
       goTestTimeout: ${{ inputs.goTestTimeout }}
   vuln:
     uses: ./.github/workflows/vuln.yml
     with:
-      jobTimeoutMinutes: ${{ inputs.vulnJobTimeoutMinutes }}
+      jobTimeoutMinutes: ${{ inputs.vulnJobTimeoutMinutes || 0 }}

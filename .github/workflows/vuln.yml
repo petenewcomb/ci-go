@@ -15,7 +15,7 @@ jobs:
   run:
     name: Vuln
     runs-on: ubuntu-latest
-    timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes) }}
+    timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes || 5) }}
     strategy:
       fail-fast: true
 
