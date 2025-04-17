@@ -5,6 +5,7 @@ permissions:
 
 on:
   workflow_call:
+    inputs:
       buildTags:
         description: 'Build tags to use. Default is "1" which works as no-op'
         default: '1'

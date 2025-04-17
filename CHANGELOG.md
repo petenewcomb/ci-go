@@ -4,6 +4,12 @@ The `ci-go` project adheres to [Semantic Versioning]. This file documents all
 notable changes to this project and generally follows the [Keep a Changelog]
 format.
 
+## [0.0.5] - 2025-04-16
+
+### Fixed
+
+- Missing line in test workflow
+
 ## [0.0.4] - 2025-04-16
 
 ### Changed
