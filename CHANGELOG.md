@@ -4,6 +4,14 @@ The `ci-go` project adheres to [Semantic Versioning]. This file documents all
 notable changes to this project and generally follows the [Keep a Changelog]
 format.
 
+## [0.0.4] - 2025-04-16
+
+### Changed
+
+- Moved testing out of build and merged into test workflow
+- Moved linting steps out of build and merged into lint workflow
+- Bumped test timeout to 30 min
+
 ## [0.0.3] - 2025-04-10
 
 ### Added
