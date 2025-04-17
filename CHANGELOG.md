@@ -4,6 +4,13 @@ The `ci-go` project adheres to [Semantic Versioning]. This file documents all
 notable changes to this project and generally follows the [Keep a Changelog]
 format.
 
+## [0.0.7] - 2025-04-17
+
+### Changed
+
+- Moved triggers to separate "Check" workflow
+- Refactored defaulting now that component flows are always called
+
 ## [0.0.6] - 2025-04-17
 
 ### Added

@@ -1,23 +1,19 @@
-name: test
+name: Test
 
 permissions:
-  contents: write # for coverage updates on the wiki
+  contents: write # to update coverage report on the wiki
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-  schedule:
-  - cron: '0 14 * * 6' # run each Saturday at 2pm UTC
   workflow_call:
     inputs:
       groupSuffix:
         description: 'Concurrency group suffix to allow multiple jobs'
+        default: ''
         required: false
         type: string
       jobTimeoutMinutes:
         description: 'Overall job timeout in minutes'
+        default: 15
         required: false
         type: number
       buildTags:
@@ -26,9 +22,9 @@ on:
         type: string
       testTimeout:
         description: 'Value to pass to go test -timeout'
+        default: '10m'
         required: false
         type: string
-  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}${{ inputs.groupSuffix }}
@@ -38,7 +34,7 @@ jobs:
   run:
     name: Test
     runs-on: ubuntu-latest
-    timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes || 15) }}
+    timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes) }}
     strategy:
       fail-fast: true
       matrix:
@@ -56,8 +52,8 @@ jobs:
 
       - name: Go Test
         run: |
-          go test -v -timeout=${{ inputs.testTimeout || '10m' }} -shuffle=on \
-             ${{ inputs.buildTags && format('-tags={0}', inputs.buildTags) || '' }} \
+          go test -v -timeout='${{ inputs.testTimeout }}' -shuffle=on \
+             ${{ inputs.buildTags && format("-tags='{0}'", inputs.buildTags) || '' }} \
              -cpu 1,2,4 -race -count=1 -coverprofile=coverage.txt -coverpkg ./...
 
       - name: Update coverage report

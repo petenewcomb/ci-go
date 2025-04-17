@@ -3,23 +3,18 @@ name: vuln
 permissions: {} # no need for any permissions
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-  schedule:
-  - cron: '0 14 * * 6' # run each Saturday at 2pm UTC
   workflow_call:
     inputs:
       groupSuffix:
         description: 'Concurrency group suffix to allow multiple jobs'
+        default: ''
         required: false
         type: string
       jobTimeoutMinutes:
         description: 'Overall job timeout in minutes'
+        default: 5
         required: false
         type: number
-  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}${{ inputs.groupSuffix }}
@@ -29,7 +24,7 @@ jobs:
   run:
     name: Vuln
     runs-on: ubuntu-latest
-    timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes || 5) }}
+    timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes) }}
     strategy:
       fail-fast: true
 

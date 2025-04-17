@@ -1,7 +1,7 @@
-name: release
+name: Release
   
 permissions:
-    contents: write
+    contents: write # to create release
 
 on:
   workflow_call:

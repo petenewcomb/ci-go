@@ -1,29 +1,25 @@
-name: lint
+name: Lint
 
 permissions: {} # no need for any permissions
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-  schedule:
-  - cron: '0 14 * * 6' # run each Saturday at 2pm UTC
   workflow_call:
     inputs:
       groupSuffix:
         description: 'Concurrency group suffix to allow multiple jobs'
+        default: ''
         required: false
         type: string
       jobTimeoutMinutes:
         description: 'Overall job timeout in minutes'
+        default: 10
         required: false
         type: number
       golangciLintTimeout:
         description: 'Value to pass to golangci-lint --timeout'
+        default: '5m'
         required: false
         type: string
-  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}${{ inputs.groupSuffix }}
@@ -33,7 +29,7 @@ jobs:
   run:
     name: Lint
     runs-on: ubuntu-latest
-    timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes || 10) }}
+    timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes) }}
     strategy:
       fail-fast: true
 
@@ -64,4 +60,4 @@ jobs:
       - name: Golangci-Lint
         uses: golangci/golangci-lint-action@v7
         with:
-          args: --timeout ${{ inputs.golangciLintTimeout || '5m' }}
+          args: --timeout ${{ inputs.golangciLintTimeout }}
