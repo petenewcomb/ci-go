@@ -6,11 +6,6 @@ permissions:
 on:
   workflow_call:
     inputs:
-      groupSuffix:
-        description: 'Concurrency group suffix to allow multiple jobs'
-        default: ''
-        required: false
-        type: string
       jobTimeoutMinutes:
         description: 'Overall job timeout in minutes'
         default: 15
@@ -25,10 +20,6 @@ on:
         default: '10m'
         required: false
         type: string
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}${{ inputs.groupSuffix }}
-  cancel-in-progress: true
 
 jobs:
   run:

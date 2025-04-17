@@ -8,6 +8,13 @@ format.
 
 ### Changed
 
+- Moved triggers to omnibus "Check" (`ci.yml`) workflow
+- Refactored defaulting now that component flows are always called
+
+## [0.0.7] - 2025-04-17
+
+### Changed
+
 - Moved triggers to separate "Check" workflow
 - Refactored defaulting now that component flows are always called
 
