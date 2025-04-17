@@ -4,6 +4,12 @@ permissions:
   contents: write # for coverage updates on the wiki
 
 on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+  - cron: '0 14 * * 6' # run each Saturday at 2pm UTC
   workflow_call:
     inputs:
       buildTags:

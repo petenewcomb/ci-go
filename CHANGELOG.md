@@ -8,13 +8,16 @@ format.
 
 ### Added
 
-- jobTimeoutMinutes, testTimeout, golangciTimeout input parameters
+- `jobTimeoutMinutes`, `testTimeout`, `golangciTimeout` input parameters
 - Concurrency group configuration for all workflows
-- Tests now run with -cpu 1,2,4
+- Tests now run with `-cpu 1,2,4`
+- Test execution on push and PR
+- Weekly cronjob execution for `test` and `lint` workflows
 
 ### Changed
 
-- Pinging pkg.go.dev to publish docs now skipped unless new publishDocs input parameter is true
+- Skip pinging `pkg.go.dev` unless new `publishDocs` input parameter is true
+- Weekly cronjobs now scheduled for Saturdays at 2pm UTC 
 
 ## [0.0.5] - 2025-04-16
 

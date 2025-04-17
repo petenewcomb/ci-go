@@ -1,6 +1,6 @@
 name: vuln
 
-permissions: {} # no need any permissions
+permissions: {} # no need for any permissions
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-  - cron: '0 10 * * 0' # run "At 10:00 on Sunday"
+  - cron: '0 14 * * 6' # run each Saturday at 2pm UTC
   workflow_call:
     inputs:
       jobTimeoutMinutes:
