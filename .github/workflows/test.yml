@@ -53,7 +53,7 @@ jobs:
       - name: Go Test
         run: |
           go test -v -timeout='${{ inputs.testTimeout }}' -shuffle=on \
-             ${{ inputs.buildTags && format('-tags=''{0}''', inputs.buildTags) || '' }} \
+             ${{ inputs.buildTags && format('-tags=''{0}'' ', inputs.buildTags) || '' }} \
              -cpu 1,2,4 -race -count=1 -coverprofile=coverage.txt -coverpkg ./...
 
       - name: Update coverage report
