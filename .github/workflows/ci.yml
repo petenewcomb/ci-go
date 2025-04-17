@@ -8,6 +8,35 @@ on:
   schedule:
   - cron: '0 14 * * 6' # run each Saturday at 2pm UTC
   workflow_dispatch:
+  workflow_call:
+      buildJobTimeoutMinutes:
+        description: 'Build job timeout in minutes'
+        required: false
+        type: number
+      buildTags:
+        description: 'Go build tags'
+        required: false
+        type: string
+      lintJobTimeoutMinutes:
+        description: 'Lint job timeout in minutes'
+        required: false
+        type: number
+      golangciLintTimeout:
+        description: 'Value to pass to golangci-lint --timeout'
+        required: false
+        type: string
+      testJobTimeoutMinutes:
+        description: 'Test job timeout in minutes'
+        required: false
+        type: number
+      goTestTimeout:
+        description: 'Value to pass to go test -timeout'
+        required: false
+        type: string
+      vulnJobTimeoutMinutes:
+        description: 'Vuln job timeout in minutes'
+        required: false
+        type: number
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -16,9 +45,21 @@ concurrency:
 jobs:
   build:
     uses: ./.github/workflows/build.yml
+    with:
+      jobTimeoutMinutes: ${{ inputs.buildJobTimeoutMinutes }}
+      buildTags: ${{ inputs.buildTags }}
   lint:
     uses: ./.github/workflows/lint.yml
+    with:
+      jobTimeoutMinutes: ${{ inputs.lintJobTimeoutMinutes }}
+      golangciLintTimeout: ${{ inputs.golangciLintTimeout }}
   test:
     uses: ./.github/workflows/test.yml
+    with:
+      testTimeoutMinutes: ${{ inputs.testJobTimeoutMinutes }}
+      buildTags: ${{ inputs.buildTags }}
+      goTestTimeout: ${{ inputs.goTestTimeout }}
   vuln:
     uses: ./.github/workflows/vuln.yml
+    with:
+      jobTimeoutMinutes: ${{ inputs.vulnJobTimeoutMinutes }}

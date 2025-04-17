@@ -4,6 +4,12 @@ The `ci-go` project adheres to [Semantic Versioning]. This file documents all
 notable changes to this project and generally follows the [Keep a Changelog]
 format.
 
+## [0.0.8] - 2025-04-17
+
+### Added
+
+- Pass-through input parameters for CI workflow
+
 ## [0.0.7] - 2025-04-17
 
 ### Changed
