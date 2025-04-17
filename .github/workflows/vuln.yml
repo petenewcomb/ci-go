@@ -11,16 +11,16 @@ on:
   - cron: '0 14 * * 6' # run each Saturday at 2pm UTC
   workflow_call:
     inputs:
-      jobTimeoutMinutes:
-        description: 'Overall job timeout in minutes'
-        default: '5'
-        required: false
-        type: number
       groupSuffix:
         description: 'Concurrency group suffix to allow multiple jobs'
         default: ''
         required: false
         type: string
+      jobTimeoutMinutes:
+        description: 'Overall job timeout in minutes'
+        default: 5
+        required: false
+        type: number
   workflow_dispatch:
 
 concurrency:
