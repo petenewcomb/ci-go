@@ -9,6 +9,7 @@ on:
   - cron: '0 14 * * 6' # run each Saturday at 2pm UTC
   workflow_dispatch:
   workflow_call:
+    inputs:
       buildJobTimeoutMinutes:
         description: 'Build job timeout in minutes'
         required: false
