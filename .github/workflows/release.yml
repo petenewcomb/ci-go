@@ -8,7 +8,6 @@ on:
     inputs:
       publishDocs:
         description: 'Publish docs to pkg.go.dev'
-        default: false
         required: false
         type: boolean
   workflow_dispatch:

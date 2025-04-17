@@ -18,6 +18,7 @@ format.
 
 - Skip pinging `pkg.go.dev` unless new `publishDocs` input parameter is true
 - Weekly cronjobs now scheduled for Saturdays at 2pm UTC 
+- Removed `skipGenerate` parameter
 
 ## [0.0.5] - 2025-04-16
 

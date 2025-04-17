@@ -13,7 +13,6 @@ on:
     inputs:
       groupSuffix:
         description: 'Concurrency group suffix to allow multiple jobs'
-        default: ''
         required: false
         type: string
       jobTimeoutMinutes:
