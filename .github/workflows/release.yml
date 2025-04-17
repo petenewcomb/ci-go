@@ -31,15 +31,16 @@ jobs:
         run: |
           sed -rn -e '/^## \[[^]]+\] - [0-9]{4}(-[0-9]{2}){2}/{ :l; p; n; /^(## |\[[^]]+\]: http)/q; bl; }' <./CHANGELOG.md >release-changelog.tmp
           head -1 release-changelog.tmp | sed -r -e 's/^## \[([^]]+)\].*$/v\1/' >release-tag.tmp
-          tag="$(cat release-tag.tmp)" && if git rev-parse -q --verify --end-of-options "$tag"; then echo "tag '$tag' already exists!"; false; fi
-          echo ${{ secrets.GITHUB_TOKEN }} | gh auth login --with-token
-          tag="$(cat release-tag.tmp)" && gh release create "$tag" -t "$tag" -F release-changelog.tmp
+          tag="$(cat release-tag.tmp)"
+          if git rev-parse -q --verify --end-of-options "$tag"; then echo "tag '$tag' already exists!"; false; fi
+          echo '${{ secrets.GITHUB_TOKEN }}' | gh auth login --with-token
+          gh release create "$tag" -t "$tag" -F release-changelog.tmp
 
       - name: Ping pkg.go.dev
         if: ${{ inputs.publishDocs }}
         run: |
-          tag="$(cat release-tag.tmp) && \
-          mod="$(go list -m) && \
+          tag="$(cat release-tag.tmp)"
+          mod="$(go list -m)
           curl --show-error --fail -w "HTTP %{http_code}\n" -o - "https://pkg.go.dev/fetch/$mod@$tag" \
             --connect-timeout 5 \
             --max-time 10 \
