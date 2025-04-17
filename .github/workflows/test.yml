@@ -23,8 +23,7 @@ on:
         required: false
         type: number
       buildTags:
-        description: 'Build tags to use. Default is "1" which works as no-op'
-        default: '1'
+        description: 'Build tags to use.'
         required: false
         type: string
       testTimeout:
@@ -42,7 +41,7 @@ jobs:
   run:
     name: Test
     runs-on: ubuntu-latest
-    timeout-minutes: ${{ inputs.jobTimeoutMinutes }}
+    timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes || 15) }}
     strategy:
       fail-fast: true
       matrix:
@@ -59,12 +58,13 @@ jobs:
           check-latest: true
 
       - name: Go Test
-        run: go test -v -timeout=${{ inputs.testTimeout }} -shuffle=on -tags=${{ inputs.buildTags }} -cpu 1,2,4 -race -count=1 -coverprofile=coverage.txt -coverpkg ./...
+        run: |
+          go test -v -timeout=${{ inputs.testTimeout }} -shuffle=on \
+             ${{ inputs.buildTags && '-tags='+inputs.buildTags || '' }} \
+             -cpu 1,2,4 -race -count=1 -coverprofile=coverage.txt -coverpkg ./...
 
       - name: Update coverage report
-        if: |
-          matrix.go == 'stable' &&
-          github.event_name == 'push'
+        if: ${{ matrix.go == 'stable' && github.event_name == 'push' }}
         uses: ncruces/go-coverage-report@v0
         with:
           amend: true

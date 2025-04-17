@@ -18,12 +18,10 @@ on:
         type: string
       jobTimeoutMinutes:
         description: 'Overall job timeout in minutes'
-        default: 10
         required: false
         type: number
       golangciLintTimeout:
         description: 'Value to pass to golangci-lint --timeout'
-        default: '5m'
         required: false
         type: string
   workflow_dispatch:
@@ -36,7 +34,7 @@ jobs:
   run:
     name: Lint
     runs-on: ubuntu-latest
-    timeout-minutes: ${{ inputs.jobTimeoutMinutes }}
+    timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes || 10) }}
     strategy:
       fail-fast: true
 
@@ -66,7 +64,7 @@ jobs:
         uses: golangci/golangci-lint-action@v5.0.0
         with:
           version: latest
-          args: --timeout ${{ inputs.golangciLintTimeout }}
+          args: --timeout ${{ inputs.golangciLintTimeout || '5m' }}
 
       - name: Go Vet
         run: go vet ./...

@@ -18,7 +18,6 @@ on:
         type: string
       jobTimeoutMinutes:
         description: 'Overall job timeout in minutes'
-        default: 5
         required: false
         type: number
   workflow_dispatch:
@@ -31,7 +30,7 @@ jobs:
   run:
     name: Vuln
     runs-on: ubuntu-latest
-    timeout-minutes: ${{ inputs.jobTimeoutMinutes }}
+    timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes || 5) }}
     strategy:
       fail-fast: true
 
