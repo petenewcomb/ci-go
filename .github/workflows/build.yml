@@ -1,7 +1,6 @@
 name: build
 
-permissions:
-  contents: write # for coverage updates on the wiki
+permissions:  {} # no need any permissions
 
 on:
   push:
@@ -12,11 +11,6 @@ on:
   - cron: '0 10 * * 0' # run "At 10:00 on Sunday"
   workflow_call:
     inputs:
-      skipTests:
-        description: 'Skip tests, useful when there is a dedicated CI job for tests'
-        default: false
-        required: false
-        type: boolean
       skipGenerate:
         description: 'Skip "go generate"'
         default: true
@@ -58,12 +52,6 @@ jobs:
           go-version: ${{ matrix.go }}
           check-latest: true
 
-      - name: Go Format
-        run: gofmt -s -w . && git diff --exit-code
-
-      - name: Go Tidy
-        run: go mod tidy && git diff --exit-code
-
       - name: Go Mod
         run: go mod download
 
@@ -77,26 +65,8 @@ jobs:
       - name: Go Build
         run: go build -o=/dev/null -tags=${{ inputs.buildTags }} ./...
 
-      - name: Go Vet
-        run: go vet ./...
-
       - name: Go Compile Tests
-        if: ${{ inputs.skipTests }}
         run: go test -exec=/bin/true -tags=${{ inputs.buildTags }} ./...
 
-      - name: Go Test
-        if: ${{ !inputs.skipTests }}
-        run: go test -v -shuffle=on -tags=${{ inputs.buildTags }} -race -count=1 -coverprofile=coverage.txt -coverpkg ./...
-
       - name: Go Benchmark
-        if: ${{ !inputs.skipTests }}
         run: go test -v -shuffle=on -tags=${{ inputs.buildTags }} -run=^$ -bench=. -benchtime=1x ./...
-
-      - name: Update coverage report
-        if: |
-          !inputs.skipTests &&
-          matrix.go == 'stable' &&
-          github.event_name == 'push'
-        uses: ncruces/go-coverage-report@v0
-        with:
-          amend: true
