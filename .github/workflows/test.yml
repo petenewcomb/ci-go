@@ -68,7 +68,7 @@ jobs:
             { "type": "full", "name": "race", "args": "-race -bench=. -benchtime=1x", "timeoutMinutes": ${{ inputs.fullRaceTimeoutMinutes }} }
           ]'
           echo -n "matrix=" >> $GITHUB_OUTPUT
-          echo "$source_matrix" | jq 'map(. + {jobTimeoutMinutes: (.timeoutMinutes + 5)})' >> $GITHUB_OUTPUT
+          echo "$source_matrix" | jq -c 'map(. + {jobTimeoutMinutes: (.timeoutMinutes + 5)})' >> $GITHUB_OUTPUT
 
   test:
     name: Test
