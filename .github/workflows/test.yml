@@ -83,14 +83,20 @@ jobs:
         test-config: ${{ fromJSON(needs.calculate-matrix.outputs.matrix) }}
 
     steps:
-      - name: Run tests
-        uses: ./.github/actions/run-go-tests
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Go
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go }}
-          module-path: ${{ matrix.module }}
-          test-args: ${{ matrix.test-config.args }}
-          timeout: ${{ matrix.test-config.timeoutMinutes }}m
-          build-tags: ${{ inputs.buildTags }}
+      
+      - name: Run tests
+        working-directory: ${{ matrix.module }}
+        run: |
+          go test -v -count=1 -shuffle=on -timeout='${{ matrix.test-config.timeoutMinutes }}m' \
+            ${{ inputs.buildTags && format('-tags=''{0}'' ', inputs.buildTags) || '' }} \
+            ${{ matrix.test-config.args }} ./...
 
       - name: Update coverage report
         if: ${{ matrix.go == 'stable' && matrix.module == '.' && matrix.test-config.type == 'full' && matrix.test-config.name == 'default' && github.event_name == 'push' }}
