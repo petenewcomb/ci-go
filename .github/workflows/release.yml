@@ -41,7 +41,7 @@ jobs:
         if: ${{ inputs.publishDocs }}
         run: |
           tag="$(cat release-tag.tmp)"
-          mod="$(go list -m)
+          mod="$(go list -m)"
           curl --show-error --fail -w "HTTP %{http_code}\n" -o - "https://pkg.go.dev/fetch/$mod@$tag" \
             --connect-timeout 5 \
             --max-time 10 \

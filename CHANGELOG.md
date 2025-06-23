@@ -4,6 +4,23 @@ The `ci-go` project adheres to [Semantic Versioning]. This file documents all
 notable changes to this project and generally follows the [Keep a Changelog]
 format.
 
+## [Unreleased]
+
+### Added
+- Development documentation files (`DEVELOPMENT.md`, `.github/copilot-instructions.md`)
+- Working notes documentation (`WORKING_NOTES.md`)
+- Pre-commit hook script (`.githooks/pre-commit`)
+- LICENSE.txt file
+- Permissions declaration to ci.yml workflow
+
+### Changed
+- Moved `go generate` validation from build workflow to lint workflow for better separation of concerns
+- Fixed syntax error in release.yml workflow (missing quote)
+
+### Fixed
+- Input defaulting behavior in workflows
+- Various workflow configuration issues
+
 ## [0.0.8] - 2025-04-17
 
 ### Added

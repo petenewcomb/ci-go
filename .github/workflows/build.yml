@@ -42,14 +42,8 @@ jobs:
       - name: Go Mod Verify
         run: go mod verify
 
-      - name: Go Generate
-        run: go generate ./... && git diff --exit-code
-
       - name: Go Build
         run: go build -o=/dev/null ${{ inputs.buildTags && format('-tags=''{0}'' ', inputs.buildTags) || '' }} ./...
 
       - name: Go Compile Tests
         run: go test -exec=/bin/true ${{ inputs.buildTags && format('-tags=''{0}'' ', inputs.buildTags) || '' }} ./...
-
-      - name: Go Benchmark
-        run: go test -v -shuffle=on ${{ inputs.buildTags && format('-tags=''{0}'' ', inputs.buildTags) || '' }} -run=^$ -bench=. -benchtime=1x ./...

@@ -42,11 +42,41 @@ jobs:
           go-version: ${{ matrix.go }}
           check-latest: true
 
-      - name: Go Test
+      - name: Go Test (short)
         run: |
-          go test -v -timeout='${{ inputs.goTestTimeout || '10m' }}' -shuffle=on \
+          go test -v -count=1 -shuffle=on -timeout='${{ inputs.goTestTimeout || '10m' }}' \
              ${{ inputs.buildTags && format('-tags=''{0}'' ', inputs.buildTags) || '' }} \
-             -cpu 1,2,4 -race -count=1 -coverprofile=coverage.txt -coverpkg ./...
+             -short ./...
+
+      - name: Go Test (short, 1 cpu)
+        run: |
+          go test -v -count=1 -shuffle=on -timeout='${{ inputs.goTestTimeout || '10m' }}' \
+             ${{ inputs.buildTags && format('-tags=''{0}'' ', inputs.buildTags) || '' }} \
+             -short -cpu 1 ./...
+
+      - name: Go Test (short, race)
+        run: |
+          go test -v -count=1 -shuffle=on -timeout='${{ inputs.goTestTimeout || '10m' }}' \
+             ${{ inputs.buildTags && format('-tags=''{0}'' ', inputs.buildTags) || '' }} \
+             -short -race ./...
+
+      - name: Go Test (full, benchmarks, coverage)
+        run: |
+          go test -v -count=1 -shuffle=on -timeout='${{ inputs.goTestTimeout || '10m' }}' \
+             ${{ inputs.buildTags && format('-tags=''{0}'' ', inputs.buildTags) || '' }} \
+             -bench=. -benchtime=1x -coverprofile=coverage.txt -coverpkg=./... ./...
+
+      - name: Go Test (full, benchmarks, 1 cpu)
+        run: |
+          go test -v -count=1 -shuffle=on -timeout='${{ inputs.goTestTimeout || '10m' }}' \
+             ${{ inputs.buildTags && format('-tags=''{0}'' ', inputs.buildTags) || '' }} \
+             -bench=. -benchtime=1x -cpu 1 ./...
+
+      - name: Go Test (full, benchmarks, race)
+        run: |
+          go test -v -count=1 -shuffle=on -timeout='${{ inputs.goTestTimeout || '10m' }}' \
+             ${{ inputs.buildTags && format('-tags=''{0}'' ', inputs.buildTags) || '' }} \
+             -race -bench=. -benchtime=1x ./...
 
       - name: Update coverage report
         if: ${{ matrix.go == 'stable' && github.event_name == 'push' }}

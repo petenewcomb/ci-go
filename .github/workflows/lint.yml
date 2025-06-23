@@ -45,6 +45,9 @@ jobs:
       - name: Go Tidy
         run: go mod tidy && git diff --exit-code
 
+      - name: Go Generate
+        run: go generate ./... && git diff --exit-code
+
       - name: Go Vet
         run: go vet ./...
 
