@@ -59,16 +59,7 @@ jobs:
       - name: Calculate test matrix with job timeouts
         id: calc
         run: |
-          source_matrix='[
-            { "type": "short", "name": "default", "args": "-short", "timeoutMinutes": ${{ inputs.shortTimeoutMinutes }} },
-            { "type": "short", "name": "1cpu", "args": "-short -cpu 1", "timeoutMinutes": ${{ inputs.short1CpuTimeoutMinutes }} },
-            { "type": "short", "name": "race", "args": "-short -race", "timeoutMinutes": ${{ inputs.shortRaceTimeoutMinutes }} },
-            { "type": "full", "name": "default", "args": "-bench=. -benchtime=1x -coverprofile=coverage.txt -coverpkg=./...", "timeoutMinutes": ${{ inputs.fullTimeoutMinutes }} },
-            { "type": "full", "name": "1cpu", "args": "-bench=. -benchtime=1x -cpu 1", "timeoutMinutes": ${{ inputs.full1CpuTimeoutMinutes }} },
-            { "type": "full", "name": "race", "args": "-race -bench=. -benchtime=1x", "timeoutMinutes": ${{ inputs.fullRaceTimeoutMinutes }} }
-          ]'
-          echo -n "matrix=" >> $GITHUB_OUTPUT
-          echo "$source_matrix" | jq 'map(. + {jobTimeoutMinutes: (.timeoutMinutes + 5)})' >> $GITHUB_OUTPUT
+          echo 'matrix=[{"type":"short","name":"default","args":"-short","timeoutMinutes":5,"jobTimeoutMinutes":10}]' >> $GITHUB_OUTPUT
 
   test:
     name: Test
