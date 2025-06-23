@@ -55,7 +55,7 @@ jobs:
     name: Test (short)
     runs-on: ubuntu-latest
     needs: discover-modules
-    timeout-minutes: ${{ matrix.test-config.timeoutMinutes + 5 }}
+    timeout-minutes: ${{ fromJSON(matrix.test-config.timeoutMinutes) + 5 }}
     strategy:
       fail-fast: true
       matrix:
@@ -80,7 +80,7 @@ jobs:
     name: Test (full)
     runs-on: ubuntu-latest
     needs: discover-modules
-    timeout-minutes: ${{ matrix.test-config.timeoutMinutes + 5 }}
+    timeout-minutes: ${{ fromJSON(matrix.test-config.timeoutMinutes) + 5 }}
     strategy:
       fail-fast: true
       matrix:
