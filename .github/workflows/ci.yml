@@ -72,24 +72,24 @@ jobs:
   build:
     uses: ./.github/workflows/build.yml
     with:
-      jobTimeoutMinutes: ${{ inputs.buildJobTimeoutMinutes || 0 }}
+      jobTimeoutMinutes: ${{ inputs.buildJobTimeoutMinutes || 5 }}
       buildTags: ${{ inputs.buildTags }}
   lint:
     uses: ./.github/workflows/lint.yml
     with:
-      jobTimeoutMinutes: ${{ inputs.lintJobTimeoutMinutes || 0 }}
+      jobTimeoutMinutes: ${{ inputs.lintJobTimeoutMinutes || 5 }}
       golangciLintTimeout: ${{ inputs.golangciLintTimeout }}
   test:
     uses: ./.github/workflows/test.yml
     with:
       buildTags: ${{ inputs.buildTags }}
-      shortTimeoutMinutes: ${{ inputs.shortTestTimeoutMinutes }}
-      short1CpuTimeoutMinutes: ${{ inputs.short1CpuTestTimeoutMinutes }}
-      shortRaceTimeoutMinutes: ${{ inputs.shortRaceTestTimeoutMinutes }}
-      fullTimeoutMinutes: ${{ inputs.fullTestTimeoutMinutes }}
-      full1CpuTimeoutMinutes: ${{ inputs.full1CpuTestTimeoutMinutes }}
-      fullRaceTimeoutMinutes: ${{ inputs.fullRaceTestTimeoutMinutes }}
+      shortTimeoutMinutes: ${{ inputs.shortTestTimeoutMinutes || 5 }}
+      short1CpuTimeoutMinutes: ${{ inputs.short1CpuTestTimeoutMinutes || 5 }}
+      shortRaceTimeoutMinutes: ${{ inputs.shortRaceTestTimeoutMinutes || 10 }}
+      fullTimeoutMinutes: ${{ inputs.fullTestTimeoutMinutes || 10 }}
+      full1CpuTimeoutMinutes: ${{ inputs.full1CpuTestTimeoutMinutes || 10 }}
+      fullRaceTimeoutMinutes: ${{ inputs.fullRaceTestTimeoutMinutes || 15 }}
   vuln:
     uses: ./.github/workflows/vuln.yml
     with:
-      jobTimeoutMinutes: ${{ inputs.vulnJobTimeoutMinutes || 0 }}
+      jobTimeoutMinutes: ${{ inputs.vulnJobTimeoutMinutes || 5 }}
