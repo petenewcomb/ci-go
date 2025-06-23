@@ -16,9 +16,8 @@ format.
 - Reusable `modules.yml` workflow for discovering Go modules in repositories
 - Enhanced golangci-lint configuration with security, performance, and code quality linters
 - License auditing with `go-licenses` to prevent restrictive dependencies
-- Parallel test execution with separate short and full test jobs
-- Granular timeout controls for each test configuration
-- Reusable composite action for Go tests to eliminate boilerplate
+- Matrix-based test execution with granular timeout controls for each test configuration
+- Comprehensive golangci-lint configuration validation in pre-commit hook
 
 ### Changed
 - Moved `go generate` validation from build workflow to lint workflow for better separation of concerns
@@ -27,8 +26,7 @@ format.
 - Coverage reporting limited to root module only
 - Separated repository-wide operations (formatting, linting) from per-module operations (tidy, vet, generate)
 - Replaced generic `run:` job IDs with descriptive names (`build:`, `test:`, `vuln:`, `release:`)
-- Test workflows split into parallel `test-short` and `test-full` jobs for faster execution
-- Timeout configuration simplified to use minutes-based inputs with automatic job timeout derivation
+- Test workflow unified with matrix-based parallel execution and automatic timeout calculation
 - Pre-commit hook optimized to run repository-wide operations once, per-module operations separately
 
 ### Fixed
