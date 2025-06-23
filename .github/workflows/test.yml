@@ -51,45 +51,38 @@ jobs:
   discover-modules:
     uses: ./.github/workflows/modules.yml
 
-  test-short:
-    name: Test (short)
+  calculate-matrix:
     runs-on: ubuntu-latest
-    needs: discover-modules
-    timeout-minutes: ${{ fromJSON(matrix.test-config.timeoutMinutes) + 5 }}
-    strategy:
-      fail-fast: true
-      matrix:
-        go: ['stable', 'oldstable']
-        module: ${{ fromJSON(needs.discover-modules.outputs.modules) }}
-        test-config:
-          - { name: "default", args: "-short", timeoutMinutes: "${{ inputs.shortTimeoutMinutes }}" }
-          - { name: "1 cpu", args: "-short -cpu 1", timeoutMinutes: "${{ inputs.short1CpuTimeoutMinutes }}" }
-          - { name: "race", args: "-short -race", timeoutMinutes: "${{ inputs.shortRaceTimeoutMinutes }}" }
-
+    env:
+      sourceMatrix: |
+        [
+          { "type": "short", "name": "default", "args": "-short", "timeoutMinutes": ${{ inputs.shortTimeoutMinutes }} },
+          { "type": "short", "name": "1cpu", "args": "-short -cpu 1", "timeoutMinutes": ${{ inputs.short1CpuTimeoutMinutes }} },
+          { "type": "short", "name": "race", "args": "-short -race", "timeoutMinutes": ${{ inputs.shortRaceTimeoutMinutes }} },
+          { "type": "full", "name": "default", "args": "-bench=. -benchtime=1x -coverprofile=coverage.txt -coverpkg=./...", "timeoutMinutes": ${{ inputs.fullTimeoutMinutes }} },
+          { "type": "full", "name": "1cpu", "args": "-bench=. -benchtime=1x -cpu 1", "timeoutMinutes": ${{ inputs.full1CpuTimeoutMinutes }} },
+          { "type": "full", "name": "race", "args": "-race -bench=. -benchtime=1x", "timeoutMinutes": ${{ inputs.fullRaceTimeoutMinutes }} }
+        ]
+    outputs:
+      matrix: ${{ steps.calc.outputs.matrix }}
     steps:
-      - name: Run tests
-        uses: ./.github/actions/run-go-tests
-        with:
-          go-version: ${{ matrix.go }}
-          module-path: ${{ matrix.module }}
-          test-args: ${{ matrix.test-config.args }}
-          timeout: ${{ matrix.test-config.timeoutMinutes }}m
-          build-tags: ${{ inputs.buildTags }}
+      - name: Calculate test matrix with job timeouts
+        id: calc
+        run: |
+          echo -n "matrix=" >> $GITHUB_OUTPUT
+          echo '${{ env.sourceMatrix }}' | jq 'map(. + {jobTimeoutMinutes: (.timeoutMinutes + 5)})' >> $GITHUB_OUTPUT
 
-  test-full:
-    name: Test (full)
+  test:
+    name: Test
     runs-on: ubuntu-latest
-    needs: discover-modules
-    timeout-minutes: ${{ fromJSON(matrix.test-config.timeoutMinutes) + 5 }}
+    needs: [discover-modules, calculate-matrix]
+    timeout-minutes: ${{ matrix.test-config.jobTimeoutMinutes }}
     strategy:
       fail-fast: true
       matrix:
         go: ['stable', 'oldstable']
         module: ${{ fromJSON(needs.discover-modules.outputs.modules) }}
-        test-config:
-          - { name: "coverage", args: "-bench=. -benchtime=1x -coverprofile=coverage.txt -coverpkg=./...", timeoutMinutes: "${{ inputs.fullTimeoutMinutes }}" }
-          - { name: "1 cpu", args: "-bench=. -benchtime=1x -cpu 1", timeoutMinutes: "${{ inputs.full1CpuTimeoutMinutes }}" }
-          - { name: "race", args: "-race -bench=. -benchtime=1x", timeoutMinutes: "${{ inputs.fullRaceTimeoutMinutes }}" }
+        test-config: ${{ fromJSON(needs.calculate-matrix.outputs.matrix) }}
 
     steps:
       - name: Run tests
@@ -102,7 +95,7 @@ jobs:
           build-tags: ${{ inputs.buildTags }}
 
       - name: Update coverage report
-        if: ${{ matrix.go == 'stable' && matrix.module == '.' && matrix.test-config.name == 'coverage' && github.event_name == 'push' }}
+        if: ${{ matrix.go == 'stable' && matrix.module == '.' && matrix.test-config.type == 'full' && matrix.test-config.name == 'default' && github.event_name == 'push' }}
         uses: ncruces/go-coverage-report@v0
         with:
           coverage-file: ${{ matrix.module }}/coverage.txt
