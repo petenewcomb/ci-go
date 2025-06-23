@@ -52,6 +52,10 @@ jobs:
     uses: ./.github/workflows/modules.yml
 
   calculate-matrix:
+    # Users specify test timeouts, but GitHub Actions job timeouts must also be set (and longer
+    # than test timeouts so tests can timeout gracefully). Since GitHub Actions doesn't support 
+    # arithmetic in timeout-minutes expressions, we compute jobTimeoutMinutes = testTimeout + 5
+    # using shell arithmetic and output a matrix the test job can reference.
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.calc.outputs.matrix }}
