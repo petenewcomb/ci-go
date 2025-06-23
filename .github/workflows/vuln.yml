@@ -15,7 +15,7 @@ jobs:
   discover-modules:
     uses: ./.github/workflows/modules.yml
 
-  run:
+  vuln:
     name: Vuln
     runs-on: ubuntu-latest
     needs: discover-modules

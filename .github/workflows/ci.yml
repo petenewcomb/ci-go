@@ -29,14 +29,36 @@ on:
         description: 'Value to pass to golangci-lint --timeout'
         required: false
         type: string
-      testJobTimeoutMinutes:
-        description: 'Test job timeout in minutes'
+      shortTestTimeoutMinutes:
+        description: 'Timeout for short tests in minutes'
+        default: 5
         required: false
         type: number
-      goTestTimeout:
-        description: 'Value to pass to go test -timeout'
+      short1CpuTestTimeoutMinutes:
+        description: 'Timeout for short 1-cpu tests in minutes'
+        default: 5
         required: false
-        type: string
+        type: number
+      shortRaceTestTimeoutMinutes:
+        description: 'Timeout for short race tests in minutes'
+        default: 10
+        required: false
+        type: number
+      fullTestTimeoutMinutes:
+        description: 'Timeout for full tests in minutes'
+        default: 10
+        required: false
+        type: number
+      full1CpuTestTimeoutMinutes:
+        description: 'Timeout for full 1-cpu tests in minutes'
+        default: 10
+        required: false
+        type: number
+      fullRaceTestTimeoutMinutes:
+        description: 'Timeout for full race tests in minutes'
+        default: 15
+        required: false
+        type: number
       vulnJobTimeoutMinutes:
         description: 'Vuln job timeout in minutes'
         required: false
@@ -60,9 +82,13 @@ jobs:
   test:
     uses: ./.github/workflows/test.yml
     with:
-      jobTimeoutMinutes: ${{ inputs.testJobTimeoutMinutes || 0 }}
       buildTags: ${{ inputs.buildTags }}
-      goTestTimeout: ${{ inputs.goTestTimeout }}
+      shortTimeoutMinutes: ${{ inputs.shortTestTimeoutMinutes }}
+      short1CpuTimeoutMinutes: ${{ inputs.short1CpuTestTimeoutMinutes }}
+      shortRaceTimeoutMinutes: ${{ inputs.shortRaceTestTimeoutMinutes }}
+      fullTimeoutMinutes: ${{ inputs.fullTestTimeoutMinutes }}
+      full1CpuTimeoutMinutes: ${{ inputs.full1CpuTestTimeoutMinutes }}
+      fullRaceTimeoutMinutes: ${{ inputs.fullRaceTestTimeoutMinutes }}
   vuln:
     uses: ./.github/workflows/vuln.yml
     with:

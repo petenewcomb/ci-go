@@ -18,7 +18,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  run:
+  release:
     name: Release
     runs-on: ubuntu-latest
     steps:

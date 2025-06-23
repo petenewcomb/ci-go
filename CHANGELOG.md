@@ -14,12 +14,22 @@ format.
 - Permissions declaration to ci.yml workflow
 - Multi-module support for all workflows (build, lint, test, vuln)
 - Reusable `modules.yml` workflow for discovering Go modules in repositories
+- Enhanced golangci-lint configuration with security, performance, and code quality linters
+- License auditing with `go-licenses` to prevent restrictive dependencies
+- Parallel test execution with separate short and full test jobs
+- Granular timeout controls for each test configuration
+- Reusable composite action for Go tests to eliminate boilerplate
 
 ### Changed
 - Moved `go generate` validation from build workflow to lint workflow for better separation of concerns
 - Fixed syntax error in release.yml workflow (missing quote)
 - Workflows now use matrix strategy to test each Go module independently
 - Coverage reporting limited to root module only
+- Separated repository-wide operations (formatting, linting) from per-module operations (tidy, vet, generate)
+- Replaced generic `run:` job IDs with descriptive names (`build:`, `test:`, `vuln:`, `release:`)
+- Test workflows split into parallel `test-short` and `test-full` jobs for faster execution
+- Timeout configuration simplified to use minutes-based inputs with automatic job timeout derivation
+- Pre-commit hook optimized to run repository-wide operations once, per-module operations separately
 
 ### Fixed
 - Input defaulting behavior in workflows

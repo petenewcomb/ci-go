@@ -20,8 +20,35 @@ jobs:
   discover-modules:
     uses: ./.github/workflows/modules.yml
 
-  run:
-    name: Lint
+  lint-repo:
+    name: Lint repository
+    runs-on: ubuntu-latest
+    timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes || 10) }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 'stable'
+          check-latest: true
+
+      - name: Go Format
+        run: gofmt -s -w . && git diff --exit-code
+
+      - name: Go Imports
+        run: |
+          go install golang.org/x/tools/cmd/goimports@latest
+          goimports -w . && git diff --exit-code
+
+      - name: Golangci-Lint
+        uses: golangci/golangci-lint-action@v7
+        with:
+          args: --timeout ${{ inputs.golangciLintTimeout || '5m' }}
+
+  lint-modules:
+    name: Lint modules
     runs-on: ubuntu-latest
     needs: discover-modules
     timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes || 10) }}
@@ -40,16 +67,6 @@ jobs:
           go-version: 'stable'
           check-latest: true
 
-      - name: Go Format
-        working-directory: ${{ matrix.module }}
-        run: gofmt -s -w . && git diff --exit-code
-
-      - name: Go Imports
-        working-directory: ${{ matrix.module }}
-        run: |
-          go install golang.org/x/tools/cmd/goimports@latest
-          goimports -w . && git diff --exit-code
-
       - name: Go Tidy
         working-directory: ${{ matrix.module }}
         run: go mod tidy && git diff --exit-code
@@ -62,8 +79,10 @@ jobs:
         working-directory: ${{ matrix.module }}
         run: go vet ./...
 
-      - name: Golangci-Lint
-        uses: golangci/golangci-lint-action@v7
-        with:
-          working-directory: ${{ matrix.module }}
-          args: --timeout ${{ inputs.golangciLintTimeout || '5m' }}
+      - name: Install go-licenses
+        run: go install github.com/google/go-licenses@latest
+
+      - name: Check licenses
+        working-directory: ${{ matrix.module }}
+        run: |
+          go-licenses check --include_tests --disallowed_types=forbidden,restricted,unknown ./...
