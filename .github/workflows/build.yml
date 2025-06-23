@@ -17,14 +17,19 @@ on:
         type: string
 
 jobs:
+  discover-modules:
+    uses: ./.github/workflows/modules.yml
+
   run:
     name: Build
     runs-on: ubuntu-latest
+    needs: discover-modules
     timeout-minutes: ${{ fromJSON(inputs.jobTimeoutMinutes || 5) }}
     strategy:
       fail-fast: true
       matrix:
         go: ['stable', 'oldstable']
+        module: ${{ fromJSON(needs.discover-modules.outputs.modules) }}
 
     steps:
       - name: Check out code
@@ -37,13 +42,17 @@ jobs:
           check-latest: true
 
       - name: Go Mod
+        working-directory: ${{ matrix.module }}
         run: go mod download
 
       - name: Go Mod Verify
+        working-directory: ${{ matrix.module }}
         run: go mod verify
 
       - name: Go Build
+        working-directory: ${{ matrix.module }}
         run: go build -o=/dev/null ${{ inputs.buildTags && format('-tags=''{0}'' ', inputs.buildTags) || '' }} ./...
 
       - name: Go Compile Tests
+        working-directory: ${{ matrix.module }}
         run: go test -exec=/bin/true ${{ inputs.buildTags && format('-tags=''{0}'' ', inputs.buildTags) || '' }} ./...

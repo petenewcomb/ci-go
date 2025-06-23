@@ -1,0 +1,41 @@
+name: Discover Modules
+
+permissions: {} # no need for any permissions
+
+on:
+  workflow_call:
+    outputs:
+      modules:
+        description: 'JSON array of module directories'
+        value: ${{ jobs.discover-modules.outputs.modules }}
+
+jobs:
+  discover-modules:
+    name: Discover modules
+    runs-on: ubuntu-latest
+    outputs:
+      modules: ${{ steps.find-modules.outputs.modules }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      
+      - name: Find modules
+        id: find-modules
+        run: |
+          echo -n "modules=[" >> $GITHUB_OUTPUT
+          sep=""
+          find . -type f -name go.mod -print0 | while IFS= read -r -d '' file; do
+            dir="${file%/*}"
+            # Convert ./path to path, and . to .
+            if [ "$dir" = "." ]; then
+              module_dir="."
+            else
+              module_dir="${dir#./}"
+            fi
+            
+            echo -n "$sep" >> $GITHUB_OUTPUT
+            echo "$module_dir" | jq -R . | tr -d '\n' >> $GITHUB_OUTPUT
+            sep=","
+          done
+          echo "]" >> $GITHUB_OUTPUT
+          echo "Found modules: $(grep "^modules=" $GITHUB_OUTPUT | cut -d= -f2-)"

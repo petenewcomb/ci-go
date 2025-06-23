@@ -12,14 +12,19 @@ format.
 - Pre-commit hook script (`.githooks/pre-commit`)
 - LICENSE.txt file
 - Permissions declaration to ci.yml workflow
+- Multi-module support for all workflows (build, lint, test, vuln)
+- Reusable `modules.yml` workflow for discovering Go modules in repositories
 
 ### Changed
 - Moved `go generate` validation from build workflow to lint workflow for better separation of concerns
 - Fixed syntax error in release.yml workflow (missing quote)
+- Workflows now use matrix strategy to test each Go module independently
+- Coverage reporting limited to root module only
 
 ### Fixed
 - Input defaulting behavior in workflows
 - Various workflow configuration issues
+- Workflows now handle repositories with multiple Go modules (matches pre-commit hook behavior)
 
 ## [0.0.8] - 2025-04-17
 
