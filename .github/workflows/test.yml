@@ -69,7 +69,7 @@ jobs:
             { "type": "short", "name": "race", "args": "-short -race", "timeoutMinutes": ${{ inputs.shortRaceTimeoutMinutes }} },
             { "type": "full", "name": "default", "args": "-bench=. -benchtime=1x -coverprofile=coverage.txt -coverpkg=./...", "timeoutMinutes": ${{ inputs.fullTimeoutMinutes }} },
             { "type": "full", "name": "1cpu", "args": "-bench=. -benchtime=1x -cpu 1", "timeoutMinutes": ${{ inputs.full1CpuTimeoutMinutes }} },
-            { "type": "full", "name": "race", "args": "-race -bench=. -benchtime=1x", "timeoutMinutes": ${{ inputs.fullRaceTimeoutMinutes }} }
+            { "type": "full", "name": "race", "args": "-bench=. -benchtime=1x -race", "timeoutMinutes": ${{ inputs.fullRaceTimeoutMinutes }} }
           ]'
           echo -n "matrix=" >> $GITHUB_OUTPUT
           echo "$source_matrix" | jq -c 'map(. + {jobTimeoutMinutes: (.timeoutMinutes + 5)})' >> $GITHUB_OUTPUT
