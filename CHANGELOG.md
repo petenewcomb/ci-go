@@ -6,6 +6,8 @@ format.
 
 ## [Unreleased]
 
+## [0.0.9] - 2025-06-24
+
 ### Added
 - Development documentation files (`DEVELOPMENT.md`, `.github/copilot-instructions.md`)
 - Working notes documentation (`WORKING_NOTES.md`)
