@@ -1,0 +1,7 @@
+# Disallowed license types
+!forbidden
+!restricted
+!unknown
+
+# Global ignores for all modules
+**/cmd/*:.

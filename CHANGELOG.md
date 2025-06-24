@@ -18,6 +18,7 @@ format.
 - License auditing with `go-licenses` to prevent restrictive dependencies
 - Matrix-based test execution with granular timeout controls for each test configuration
 - Comprehensive golangci-lint configuration validation in pre-commit hook
+- `go-licenses-ignore` utility for sophisticated license ignore pattern management
 
 ### Changed
 - Moved `go generate` validation from build workflow to lint workflow for better separation of concerns

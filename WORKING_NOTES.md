@@ -144,7 +144,9 @@ The psg-go usage validates ci-go's design:
 - Enables PSG's heavy benchmarks (30+ min) while keeping short tests fast (5 min)
 
 ### Enhanced Security and Code Quality
-**License Auditing**: `go-licenses` integration prevents restrictive dependencies
+**License Auditing**: `go-licenses` integration with sophisticated ignore pattern management
+- `go-licenses-ignore` utility provides flexible ignore pattern configuration
+- Supports glob patterns, self-reference syntax, and multi-module repositories
 - Blocks forbidden, restricted, unknown license types
 - Includes test dependencies (`--include_tests`)
 - Critical for library projects like PSG that affect consumer licensing
@@ -178,9 +180,9 @@ Matrix execution allows parallel processing across modules and configurations.
 
 ### Enhanced Security
 Comprehensive golangci-lint configuration with 15+ additional linters.
-License auditing prevents restrictive dependencies in consuming projects.
+License auditing with `go-licenses-ignore` utility for sophisticated ignore pattern management.
 
 ## Next Steps
-- Release v0.0.9 with matrix timeout functionality
+- Release v0.0.9 with matrix timeout functionality and go-licenses-ignore utility
 - Monitor performance across different repository sizes
 - Consider additional security scanning integration

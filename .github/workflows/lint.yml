@@ -79,10 +79,13 @@ jobs:
         working-directory: ${{ matrix.module }}
         run: go vet ./...
 
-      - name: Install go-licenses
-        run: go install github.com/google/go-licenses@latest
+      - name: Install go-licenses and go-licenses-ignore
+        run: |
+          go install github.com/google/go-licenses@latest
+          go install github.com/petenewcomb/ci-go/cmd/go-licenses-ignore@latest
 
       - name: Check licenses
         working-directory: ${{ matrix.module }}
         run: |
-          go-licenses check --include_tests --disallowed_types=forbidden,restricted,unknown ./...
+          ARGS=$(go-licenses-ignore .)
+          go-licenses check --include_tests $ARGS ./...
